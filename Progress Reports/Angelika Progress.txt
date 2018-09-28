@@ -1,1 +1,5 @@
-put progress in here
+week 3 - I have joined the team and they walked me through their ideas about the game.
+week 4 - Mostly, I was focused on the main character 
+what exactly was made:
+-Dean's look
+-Dean's animations ( walking, idle, easter egg)
