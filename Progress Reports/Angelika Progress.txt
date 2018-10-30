@@ -6,3 +6,5 @@ what exactly was made:
 week 5 - I was absent at the classes but I have created an enemy number 1
 week 6 - Me and Steven were talking a lot about the lightning and thinking about new ideas which will make our game more alive.
 Enemy number 2 for Egypt stage were created.
+week 7 - New enemies were created. Everything I've done before got an animation of walking and attacking
+week 8 - In progress of creating the rest of enemies, creating color palettes and planning backgrounds.
