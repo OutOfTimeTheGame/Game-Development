@@ -50,8 +50,12 @@ public class PlayerScript : MonoBehaviour
     public GameObject assaultRifleLeft;
     public GameObject assaultRifleRight;
 
-    //For the player's bullets
 
+    //Assault Rifle Firerate
+    public float fireRateAR = 0.18f;
+    public float fire = 0.0f;
+    //Shotgun Firerate
+    public float fireRateSG = 0.60f;
 
 
 
@@ -156,28 +160,32 @@ public class PlayerScript : MonoBehaviour
             Debug.Log(pistolAmmo);
         }
 
-        if (hasAssaultRifleAmmo == true && isUsingAssaultRifle == true && isRight == true && Input.GetKeyDown(KeyCode.LeftControl))
+        if (Time.time > fire && hasAssaultRifleAmmo == true && isUsingAssaultRifle == true && isRight == true && Input.GetKey(KeyCode.LeftControl))
         {
+            fire = Time.time + fireRateAR;
             ARUseRight();
             assaultRifleAmmo--;
             Debug.Log(assaultRifleAmmo);
         }
 
-        if (hasAssaultRifleAmmo == true && isUsingAssaultRifle == true && isLeft == true && Input.GetKeyDown(KeyCode.LeftControl))
+        if (Time.time > fire && hasAssaultRifleAmmo == true && isUsingAssaultRifle == true && isLeft == true && Input.GetKey(KeyCode.LeftControl))
         {
+            fire = Time.time + fireRateAR;
             ARUseLeft();
             assaultRifleAmmo--;
             Debug.Log(assaultRifleAmmo);
         }
 
-        if (hasShotgunAmmo == true && isUsingShotgun == true && isLeft == true && Input.GetKeyDown(KeyCode.LeftControl))
+        if (Time.time > fire && hasShotgunAmmo == true && isUsingShotgun == true && isLeft == true && Input.GetKeyDown(KeyCode.LeftControl))
         {
+            fire = Time.time + fireRateSG;
             SGUseLeft();
             shotgunAmmo--;
             Debug.Log(shotgunAmmo);
         }
-        if (hasShotgunAmmo == true && isUsingShotgun == true && isRight == true && Input.GetKeyDown(KeyCode.LeftControl))
+        if (Time.time > fire && hasShotgunAmmo == true && isUsingShotgun == true && isRight == true && Input.GetKeyDown(KeyCode.LeftControl))
         {
+            fire = Time.time + fireRateSG;
             SGUseRight();
             shotgunAmmo--;
             Debug.Log(shotgunAmmo);
@@ -450,23 +458,23 @@ public class PlayerScript : MonoBehaviour
     public void ARUseLeft()
     {
         //this needs changed for AR and Shotgun
-        GameObject PLL = GameObject.Find("plasmaLocationLeft");
-        ShootingScript shootScript = PLL.GetComponent<ShootingScript>();
+        GameObject ARPLL = GameObject.Find("arPlasmaLocationLeft");
+        ShootingScript shootScript = ARPLL.GetComponent<ShootingScript>();
         shootScript.ARShootLeft();
     }
 
     public void ARUseRight()
     {
         //this needs changed for AR and Shotgun
-        GameObject PLL = GameObject.Find("plasmaLocationLeft");
-        ShootingScript shootScript = PLL.GetComponent<ShootingScript>();
+        GameObject ARPLR = GameObject.Find("arPlasmaLocationRight");
+        ShootingScript shootScript = ARPLR.GetComponent<ShootingScript>();
         shootScript.ARShootRight();
     }
 
     public void SGUseLeft()
     {
         //this needs changed for AR and Shotgun
-        GameObject PLL = GameObject.Find("plasmaLocationLeft");
+        GameObject PLL = GameObject.Find("sgPlasmaLocationLeft");
         ShootingScript shootScript = PLL.GetComponent<ShootingScript>();
         shootScript.ShotgunShootLeft();
     }
@@ -474,13 +482,15 @@ public class PlayerScript : MonoBehaviour
     public void SGUseRight()
     {
         //this needs changed for AR and Shotgun
-        GameObject PLL = GameObject.Find("plasmaLocationLeft");
+        GameObject PLL = GameObject.Find("sgPlasmaLocationRight");
         ShootingScript shootScript = PLL.GetComponent<ShootingScript>();
         shootScript.ShotgunShootRight();
     }
 
     //For Exiting Levels and jumping
-    public void OnTriggerEnter2D(Collider2D collision)
+   
+
+    public void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.gameObject.tag == "jumpCollider")
         {
@@ -489,13 +499,23 @@ public class PlayerScript : MonoBehaviour
         }
     }
 
-    public void OnTriggerExit2D(Collider2D collision)
+    public void OnCollisionExit2D(Collision2D collision)
     {
         if (collision.gameObject.tag == "jumpCollider")
         {
-            Debug.Log("Jump True");
+            Debug.Log("Jump false");
             isGrounded = false;
         }
+    }
+
+    public void OnTriggerEnter2D(Collider2D collision)
+    {
+       
+    }
+
+    public void OnTriggerExit2D(Collider2D collision)
+    {
+        
     }
 
 }
