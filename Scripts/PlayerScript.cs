@@ -1,6 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class PlayerScript : MonoBehaviour
 {
@@ -14,9 +16,13 @@ public class PlayerScript : MonoBehaviour
     public float deanSpeed = 1.5f;
     public float deanJump = 5.0f;
 
-    public double pistolAmmo;
+    public int pistolAmmo;
     public int shotgunAmmo;
     public int assaultRifleAmmo;
+
+    public Text pistolAmmoText;
+    public Text shotgunAmmoText;
+    public Text assaultRifleAmmoText;
 
     public bool isGrounded = false;
     public bool isMoving = false;
@@ -50,6 +56,10 @@ public class PlayerScript : MonoBehaviour
     public GameObject assaultRifleLeft;
     public GameObject assaultRifleRight;
 
+    public GameObject weaponArea;
+    public GameObject pistolPortrait;
+    public GameObject shotgunPortrait;
+    public GameObject AssaultRiflePortrait;
 
     //Assault Rifle Firerate
     public float fireRateAR = 0.18f;
@@ -58,12 +68,25 @@ public class PlayerScript : MonoBehaviour
     public float fireRateSG = 0.60f;
 
 
+    //Health
+    public int maxHealth;
+    public int minHealth;
+    public int currentHealth;
+
+    public Slider healthSlider;
+
+
 
 
 
     // Use this for initialization
     void Start()
     {
+        //obtaining the current scene
+        Scene currentScene = SceneManager.GetActiveScene();
+
+        string sceneName = currentScene.name;
+
         anim = GetComponent<Animator>();
         isMoving = false;
 
@@ -89,16 +112,66 @@ public class PlayerScript : MonoBehaviour
         isUsingAssaultRifle = false;
         isUsingShotgun = false;
 
-        //pistolAmmo += 20;
-        //shotgunAmmo += 10;
-        //assaultRifleAmmo += 40;
+        pistolAmmo += 20;
+        shotgunAmmo += 10;
+        assaultRifleAmmo += 40;
 
         hasPistolAmmo = true;
         hasShotgunAmmo = true;
         hasAssaultRifle = true;
+
+
+        //Preparing the ammo HUD
+        //create a reference to the text of each ammo
+        pistolAmmoText.text = "AMMO: " + pistolAmmo;
+        shotgunAmmoText.text = "AMMO: " + shotgunAmmo;
+        assaultRifleAmmoText.text = "AMMO: " + assaultRifleAmmo;
+        //Hide all of the ammo counters on startup
+        pistolAmmoText.GetComponent<Text>().enabled = false;
+        shotgunAmmoText.GetComponent<Text>().enabled = false;
+        assaultRifleAmmoText.GetComponent<Text>().enabled = false;
+        weaponArea.SetActive(false);
+        pistolPortrait.SetActive(false);
+        shotgunPortrait.SetActive(false);
+        AssaultRiflePortrait.SetActive(false);
+
+        if (sceneName == "Level1")
+        {
+            maxHealth = 100;
+            minHealth = 0;
+            currentHealth = maxHealth;
+        }
+
+        if (sceneName == "Level2")
+        {
+            maxHealth = 125;
+            minHealth = 0;
+            currentHealth = maxHealth;
+        }
+
+        if (sceneName == "Level3")
+        {
+            maxHealth = 150;
+            minHealth = 0;
+            currentHealth = maxHealth;
+        }
+
+        if (sceneName == "Level4")
+        {
+            maxHealth = 200;
+            minHealth = 0;
+            currentHealth = maxHealth;
+        }
+
+        healthSlider.value = currentHealth;
+
     }
 
-    // Update is called once per frame
+    public void enemyDamage()
+    {
+        currentHealth -= 10;
+        healthSlider.value = currentHealth;
+    }
 
 
     public void idleLeft()
@@ -111,8 +184,42 @@ public class PlayerScript : MonoBehaviour
         anim.SetBool("hasStoppedRight", true);
     }
 
+    public void PlayerDeath()
+    {
+        Destroy(deanAnderson, 0.25f);
+    }
+
     void Update()
     {
+
+        //enemyDamage();
+
+        if (Input.GetKey(KeyCode.Q))
+        {
+            currentHealth--;
+            healthSlider.value = currentHealth;
+            if (currentHealth <= minHealth)
+            {
+                currentHealth = minHealth;
+            }
+        }
+
+        if (Input.GetKey(KeyCode.E))
+        {
+            currentHealth++;
+            healthSlider.value = currentHealth;
+            if (currentHealth >= maxHealth)
+            {
+                currentHealth = maxHealth;
+            }
+        }
+
+        if (currentHealth <= minHealth)
+        {
+            PlayerDeath();
+        }
+
+
         //Making sure the player has ammo for their weapons
         //Pistol
         if (pistolAmmo > 0)
@@ -143,12 +250,13 @@ public class PlayerScript : MonoBehaviour
         }
 
 
-
+        //Keyboard Controlling Shooting
         if (hasPistolAmmo == true && isUsingHandgun == true && isRight == true && Input.GetKeyUp(KeyCode.LeftControl))
         {
             //Call the pistol use right function and then deduct a bullet
             pistolUseRight();
             pistolAmmo--;
+            pistolAmmoText.text = "AMMO: " + pistolAmmo;
             Debug.Log(pistolAmmo);
         }
 
@@ -157,6 +265,7 @@ public class PlayerScript : MonoBehaviour
             //Call the pistol use left function and then deduct a bullet
             pistolUseLeft();
             pistolAmmo--;
+            pistolAmmoText.text = "AMMO: " + pistolAmmo;
             Debug.Log(pistolAmmo);
         }
 
@@ -165,6 +274,7 @@ public class PlayerScript : MonoBehaviour
             fire = Time.time + fireRateAR;
             ARUseRight();
             assaultRifleAmmo--;
+            assaultRifleAmmoText.text = "AMMO: " + assaultRifleAmmo;
             Debug.Log(assaultRifleAmmo);
         }
 
@@ -173,6 +283,7 @@ public class PlayerScript : MonoBehaviour
             fire = Time.time + fireRateAR;
             ARUseLeft();
             assaultRifleAmmo--;
+            assaultRifleAmmoText.text = "AMMO: " + assaultRifleAmmo;
             Debug.Log(assaultRifleAmmo);
         }
 
@@ -181,6 +292,7 @@ public class PlayerScript : MonoBehaviour
             fire = Time.time + fireRateSG;
             SGUseLeft();
             shotgunAmmo--;
+            shotgunAmmoText.text = "AMMO: " + shotgunAmmo;
             Debug.Log(shotgunAmmo);
         }
         if (Time.time > fire && hasShotgunAmmo == true && isUsingShotgun == true && isRight == true && Input.GetKeyDown(KeyCode.LeftControl))
@@ -188,12 +300,70 @@ public class PlayerScript : MonoBehaviour
             fire = Time.time + fireRateSG;
             SGUseRight();
             shotgunAmmo--;
+            shotgunAmmoText.text = "AMMO: " + shotgunAmmo;
             Debug.Log(shotgunAmmo);
         }
+        //Mouse Controlling Shooting
+        if (hasPistolAmmo == true && isUsingHandgun == true && isRight == true && Input.GetKeyUp(KeyCode.Mouse0))
+        {
+            //Call the pistol use right function and then deduct a bullet
+            pistolUseRight();
+            pistolAmmo--;
+            pistolAmmoText.text = "AMMO: " + pistolAmmo;
+            Debug.Log(pistolAmmo);
+        }
 
+        if (hasPistolAmmo == true && isUsingHandgun == true && isLeft == true && Input.GetKeyUp(KeyCode.Mouse0))
+        {
+            //Call the pistol use left function and then deduct a bullet
+            pistolUseLeft();
+            pistolAmmo--;
+            pistolAmmoText.text = "AMMO: " + pistolAmmo;
+            Debug.Log(pistolAmmo);
+        }
 
+        if (Time.time > fire && hasAssaultRifleAmmo == true && isUsingAssaultRifle == true && isRight == true && Input.GetKey(KeyCode.Mouse0))
+        {
+            //Call the Assault Rifle use Left fucntion and then deduct a bullet
+            //This adds a firerate to the Assault Rifle by only allowing it to fire when the timer resets essentially
+            fire = Time.time + fireRateAR;
+            ARUseRight();
+            assaultRifleAmmo--;
+            assaultRifleAmmoText.text = "AMMO: " + assaultRifleAmmo;
+            Debug.Log(assaultRifleAmmo);
+        }
 
+        if (Time.time > fire && hasAssaultRifleAmmo == true && isUsingAssaultRifle == true && isLeft == true && Input.GetKey(KeyCode.Mouse0))
+        {
+            //Call the Assault Rifle use Right fucntion and then deduct a bullet
+            //This adds a firerate to the Assault Rifle by only allowing it to fire when the timer resets essentially
+            fire = Time.time + fireRateAR;
+            ARUseLeft();
+            assaultRifleAmmo--;
+            assaultRifleAmmoText.text = "AMMO: " + assaultRifleAmmo;
+            Debug.Log(assaultRifleAmmo);
+        }
 
+        if (Time.time > fire && hasShotgunAmmo == true && isUsingShotgun == true && isLeft == true && Input.GetKeyDown(KeyCode.Mouse0))
+        {
+            //Call the Shotgun use Left fucntion and then deduct a bullet
+            //This adds a firerate to the Shotgun by only allowing it to fire when the timer resets essentially
+            fire = Time.time + fireRateSG;
+            SGUseLeft();
+            shotgunAmmo--;
+            shotgunAmmoText.text = "AMMO: " + shotgunAmmo;
+            Debug.Log(shotgunAmmo);
+        }
+        if (Time.time > fire && hasShotgunAmmo == true && isUsingShotgun == true && isRight == true && Input.GetKeyDown(KeyCode.Mouse0))
+        {
+            //Call the Shotgun use Right fucntion and then deduct a bullet
+            //This adds a firerate to the Shotgun by only allowing it to fire when the timer resets essentially
+            fire = Time.time + fireRateSG;
+            SGUseRight();
+            shotgunAmmo--;
+            shotgunAmmoText.text = "AMMO: " + shotgunAmmo;
+            Debug.Log(shotgunAmmo);
+        }
 
         //Moving Left
         if (Input.GetKey(KeyCode.A) || (Input.GetKey(KeyCode.LeftArrow)))
@@ -226,9 +396,6 @@ public class PlayerScript : MonoBehaviour
             anim.SetBool("hasStoppedRight", false);
             isLeft = false;
             isRight = true;
-
-
-
         }
 
         if (Input.GetKeyUp(KeyCode.D) || (Input.GetKeyUp(KeyCode.RightArrow)))
@@ -319,6 +486,16 @@ public class PlayerScript : MonoBehaviour
 
             shotgunLeft.SetActive(false);
             shotgunRight.SetActive(false);
+
+            pistolAmmoText.GetComponent<Text>().enabled = false;
+            shotgunAmmoText.GetComponent<Text>().enabled = false;
+            assaultRifleAmmoText.GetComponent<Text>().enabled = false;
+
+            weaponArea.SetActive(false);
+            pistolPortrait.SetActive(false);
+            shotgunPortrait.SetActive(false);
+            AssaultRiflePortrait.SetActive(false);
+
         }
 
 
@@ -337,19 +514,57 @@ public class PlayerScript : MonoBehaviour
 
             shotgunLeft.SetActive(false);
             shotgunRight.SetActive(false);
+
+            pistolAmmoText.GetComponent<Text>().enabled = false;
+            shotgunAmmoText.GetComponent<Text>().enabled = false;
+            assaultRifleAmmoText.GetComponent<Text>().enabled = false;
+
+            weaponArea.SetActive(false);
+            pistolPortrait.SetActive(false);
+            shotgunPortrait.SetActive(false);
+            AssaultRiflePortrait.SetActive(false);
+
         }
 
         if (isUsingHandgun == true)
         {
             usingPistol();
+
+            pistolAmmoText.GetComponent<Text>().enabled = true;
+            shotgunAmmoText.GetComponent<Text>().enabled = false;
+            assaultRifleAmmoText.GetComponent<Text>().enabled = false;
+
+            weaponArea.SetActive(true);
+            pistolPortrait.SetActive(true);
+            shotgunPortrait.SetActive(false);
+            AssaultRiflePortrait.SetActive(false);
         }
         if (isUsingAssaultRifle == true)
         {
             usingAssaultRifle();
+
+            pistolAmmoText.GetComponent<Text>().enabled = false;
+            shotgunAmmoText.GetComponent<Text>().enabled = false;
+            assaultRifleAmmoText.GetComponent<Text>().enabled = true;
+
+
+            weaponArea.SetActive(true);
+            pistolPortrait.SetActive(false);
+            shotgunPortrait.SetActive(false);
+            AssaultRiflePortrait.SetActive(true);
         }
         if (isUsingShotgun == true)
         {
             usingShotgun();
+
+            pistolAmmoText.GetComponent<Text>().enabled = false;
+            shotgunAmmoText.GetComponent<Text>().enabled = true;
+            assaultRifleAmmoText.GetComponent<Text>().enabled = false;
+
+            weaponArea.SetActive(true);
+            pistolPortrait.SetActive(false);
+            shotgunPortrait.SetActive(true);
+            AssaultRiflePortrait.SetActive(false);
         }
     }
 
@@ -366,6 +581,9 @@ public class PlayerScript : MonoBehaviour
 
             shotgunLeft.SetActive(false);
             shotgunRight.SetActive(false);
+
+            
+
         }
         if (isLeft == true)
         {
@@ -378,6 +596,7 @@ public class PlayerScript : MonoBehaviour
 
             shotgunLeft.SetActive(false);
             shotgunRight.SetActive(false);
+
         }
     }
 
@@ -394,6 +613,9 @@ public class PlayerScript : MonoBehaviour
 
             shotgunLeft.SetActive(false);
             shotgunRight.SetActive(true);
+
+            
+
         }
         if (isLeft == true)
         {
@@ -406,6 +628,9 @@ public class PlayerScript : MonoBehaviour
 
             shotgunLeft.SetActive(true);
             shotgunRight.SetActive(false);
+
+         
+
         }
     }
 
@@ -422,6 +647,8 @@ public class PlayerScript : MonoBehaviour
 
             shotgunLeft.SetActive(false);
             shotgunRight.SetActive(false);
+
+            
         }
         if (isLeft == true)
         {
@@ -434,6 +661,8 @@ public class PlayerScript : MonoBehaviour
 
             shotgunLeft.SetActive(false);
             shotgunRight.SetActive(false);
+
+           
         }
     }
 
@@ -443,13 +672,10 @@ public class PlayerScript : MonoBehaviour
         GameObject PLR = GameObject.Find("plasmaLocationRight");
         ShootingScript shootScript = PLR.GetComponent<ShootingScript>();
         shootScript.shootRight();
-
     }
 
     public void pistolUseLeft()
     {
-
-
         GameObject PLL = GameObject.Find("plasmaLocationLeft");
         ShootingScript shootScript = PLL.GetComponent<ShootingScript>();
         shootScript.shootLeft();
@@ -457,7 +683,7 @@ public class PlayerScript : MonoBehaviour
 
     public void ARUseLeft()
     {
-        //this needs changed for AR and Shotgun
+        
         GameObject ARPLL = GameObject.Find("arPlasmaLocationLeft");
         ShootingScript shootScript = ARPLL.GetComponent<ShootingScript>();
         shootScript.ARShootLeft();
@@ -465,7 +691,6 @@ public class PlayerScript : MonoBehaviour
 
     public void ARUseRight()
     {
-        //this needs changed for AR and Shotgun
         GameObject ARPLR = GameObject.Find("arPlasmaLocationRight");
         ShootingScript shootScript = ARPLR.GetComponent<ShootingScript>();
         shootScript.ARShootRight();
@@ -473,7 +698,7 @@ public class PlayerScript : MonoBehaviour
 
     public void SGUseLeft()
     {
-        //this needs changed for AR and Shotgun
+        
         GameObject PLL = GameObject.Find("sgPlasmaLocationLeft");
         ShootingScript shootScript = PLL.GetComponent<ShootingScript>();
         shootScript.ShotgunShootLeft();
@@ -481,7 +706,7 @@ public class PlayerScript : MonoBehaviour
 
     public void SGUseRight()
     {
-        //this needs changed for AR and Shotgun
+        
         GameObject PLL = GameObject.Find("sgPlasmaLocationRight");
         ShootingScript shootScript = PLL.GetComponent<ShootingScript>();
         shootScript.ShotgunShootRight();
@@ -506,16 +731,55 @@ public class PlayerScript : MonoBehaviour
             Debug.Log("Jump false");
             isGrounded = false;
         }
+        if (collision.gameObject.tag == "jumpCollider")
+        {
+            transform.parent = null;
+        }
     }
 
     public void OnTriggerEnter2D(Collider2D collision)
     {
-       
+       if (collision.gameObject.tag == "playerDeathZone")
+        {
+            //kill the player if they fall down a pit
+            currentHealth = minHealth;
+            healthSlider.value = currentHealth;
+            PlayerDeath();
+        }
+
+        Scene currentScene = SceneManager.GetActiveScene();
+
+        string sceneName = currentScene.name;
+
+        if (collision.gameObject.tag == "playerExit")
+        {
+            if (sceneName == "Level1")
+            {
+                SceneManager.LoadScene("Level2");
+            }
+
+        }
+    }
+    //whilst the player is on a platform they will move with it if it can move that is
+    public void OnCollisionStay2D(Collision2D collision)
+    {
+        if (collision.gameObject.tag == "jumpCollider")
+        {
+            transform.parent = collision.transform;
+        }
+
     }
 
     public void OnTriggerExit2D(Collider2D collision)
     {
-        
+        if (collision.gameObject.tag == "jumpCollider")
+        {
+            Debug.Log("Jump false");
+            isGrounded = false;
+        }
     }
+
+
+
 
 }

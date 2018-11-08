@@ -7,7 +7,7 @@ public class CameraFollowDean : MonoBehaviour {
     //our player reference
     public GameObject deanAnderson;
     //The speed that the camera will move
-    private float cameraMoveSpeed = 1.5f;
+    private float cameraMoveSpeed = 1.75f;
 
     //This script is from https://kylewbanks.com/blog/unity-make-camera-follow-player-smoothly-and-fluidly
     //Its use is for allowing the camera to follow the player on each axis

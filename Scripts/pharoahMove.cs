@@ -46,6 +46,7 @@ public class pharoahMove : MonoBehaviour {
         {
             //If the pharoah loses too much health then they will move slower
             pharoahMoveSpeed = 0.75f;
+            Debug.Log(pharoahHealth);
         }
 
         if (pharoahHealth <= 0)
@@ -57,6 +58,7 @@ public class pharoahMove : MonoBehaviour {
     public void loseHealthPistol()
     {
         pharoahHealth -= 5;
+        Debug.Log(pharoahHealth);
     }
     public void loseHealthRifle()
     {
