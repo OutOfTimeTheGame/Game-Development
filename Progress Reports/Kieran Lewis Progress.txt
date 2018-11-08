@@ -9,3 +9,9 @@ Week 5 - I coded the player's movement system, still to incorporate jumping, I a
 Week 6 - I started work on the shooting mechanics for the player. System works but is far from perfect
 
 Week 7 - I created a test plan for the game
+
+week 8 - I finished development of the shooting system and coded the basic movement of the first level enemies
+
+week 9 - I implemented moving platforms into the game
+
+week 10 - I coded the player health bar and the on screen ammo counters for each weapon
