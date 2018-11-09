@@ -61,6 +61,8 @@ public class PlayerScript : MonoBehaviour
     public GameObject shotgunPortrait;
     public GameObject AssaultRiflePortrait;
 
+    
+
     //Assault Rifle Firerate
     public float fireRateAR = 0.18f;
     public float fire = 0.0f;
@@ -75,6 +77,9 @@ public class PlayerScript : MonoBehaviour
 
     public Slider healthSlider;
 
+    //Score
+    public int score;
+    public Text scoreText;
 
 
 
@@ -92,8 +97,17 @@ public class PlayerScript : MonoBehaviour
 
         //The player will always have his handgun no matter what
         hasHandgun = true;
-        hasShotgun = true;
-        hasAssaultRifle = true;
+        if (sceneName == "Level2")
+        {
+            hasShotgun = true;
+        }
+
+        if (sceneName == "Level3")
+        {
+            hasAssaultRifle = true;
+        }
+        hasShotgun = false;
+        hasAssaultRifle = false;
 
         //Depending on the stance of Dean and if he has a gun out each gun's image will change respectivly 
         pistolLeft.SetActive(false);
@@ -118,7 +132,29 @@ public class PlayerScript : MonoBehaviour
 
         hasPistolAmmo = true;
         hasShotgunAmmo = true;
-        hasAssaultRifle = true;
+        hasAssaultRifleAmmo = true;
+
+        //Preparing the Score 
+        scoreText.text = "Score: " + score;
+
+        if (sceneName == "Level1")
+        {
+            score = 0;
+        }
+
+        if (sceneName == "Level2")
+        {
+            DontDestroyOnLoad(scoreText);
+        }
+        if (sceneName == "Level3")
+        {
+            DontDestroyOnLoad(scoreText);
+        }
+        if (sceneName == "Level3")
+        {
+            DontDestroyOnLoad(scoreText);
+        }
+
 
 
         //Preparing the ammo HUD
@@ -134,7 +170,7 @@ public class PlayerScript : MonoBehaviour
         pistolPortrait.SetActive(false);
         shotgunPortrait.SetActive(false);
         AssaultRiflePortrait.SetActive(false);
-
+        //Preparing the health for each level
         if (sceneName == "Level1")
         {
             maxHealth = 100;
@@ -202,6 +238,8 @@ public class PlayerScript : MonoBehaviour
             {
                 currentHealth = minHealth;
             }
+            score -= 1;
+            scoreText.text = "Score: " + score;
         }
 
         if (Input.GetKey(KeyCode.E))
@@ -212,6 +250,8 @@ public class PlayerScript : MonoBehaviour
             {
                 currentHealth = maxHealth;
             }
+            score += 1;
+            scoreText.text = "Score: " + score;
         }
 
         if (currentHealth <= minHealth)
@@ -757,7 +797,17 @@ public class PlayerScript : MonoBehaviour
             {
                 SceneManager.LoadScene("Level2");
             }
+        }
+        //picking up the shotgun from the ground
+        if (collision.gameObject.tag == "ShotgunPickup")
+        {
+            hasShotgun = true;
+        }
 
+        //picking up the assault rifle from the ground
+        if (collision.gameObject.tag == "AssaultRiflePickup")
+        {
+            hasAssaultRifle = true;
         }
     }
     //whilst the player is on a platform they will move with it if it can move that is
