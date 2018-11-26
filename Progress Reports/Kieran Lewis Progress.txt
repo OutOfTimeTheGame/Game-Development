@@ -1,17 +1,19 @@
-Week 2 - I got into a team with Steven Benson. We got our broad idea of the game down
+Week 2 - I got into a team with Steven Benson. We got our broad idea of the game down. It was going to be a 2D Side Scrolling Shooter using pixel art called Out of Time.
 
-Week 3 - Angelika was added into the team after Gavin asking us if we could accomidate her. We explained all our ideas and what needed to be done
+Week 3 - Angelika was added into the team after Gavin asking us if we could accomidate her. We explained all our ideas and what needed to be done. We decided as a team that I would still be lead programmer handling the game and programming and that Angelika and Steven would handle art and the visual design.
 
 Week 4 - We decided to have a idle animation of dabing for our main character, I progressed on the GDD 
 
 Week 5 - I coded the player's movement system, still to incorporate jumping, I also updated the GDD
 
-Week 6 - I started work on the shooting mechanics for the player. System works but is far from perfect
+Week 6 - I started work on the shooting mechanics for the player. System works but is far from perfect. Jumping is adequate but sometimes has issues of not jumping
 
-Week 7 - I created a test plan for the game
+Week 7 - I created a test plan for the game and kept note of any errors I had at the time of development
 
 week 8 - I finished development of the shooting system and coded the basic movement of the first level enemies
 
 week 9 - I implemented moving platforms into the game
 
-week 10 - I coded the player health bar and the on screen ammo counters for each weapon
+week 10 - I coded the player health bar and the on screen ammo counters for each weapon. I also finished coding the final enemies for the game 
+
+week 11 - I finished overall development of the prototype, sound just needs to be added still. 
