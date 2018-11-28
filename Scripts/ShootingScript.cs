@@ -7,7 +7,7 @@ using UnityEngine;
 public class ShootingScript : MonoBehaviour
     //Kieran Lewis 2018 :) 
 {
-
+    //Player weapon ammo
     public GameObject pistolPlasmaLeft;
     public GameObject pistolPlasmaRight;
 
@@ -17,15 +17,16 @@ public class ShootingScript : MonoBehaviour
     public GameObject ShotgunPlasmaLeft;
     public GameObject ShotgunPlasmaRight;
 
+    public GameObject RPGShotRight;
+    public GameObject RPGShotLeft;
+    public GameObject RPGBackdraftRight;
+    public GameObject RPGBackdraftLeft;
+    public GameObject RPGExplosionRight;
+    public GameObject RPGExplosionLeft;
 
-    void Start()
-    {
-
-    }
-    void Update()
-    {
-
-    }
+    //Enemy weapon ammo
+    public GameObject SpearLeft;
+    public GameObject SpearRight;
 
     public void shootRight()
     {
@@ -69,6 +70,44 @@ public class ShootingScript : MonoBehaviour
         Destroy(SGplasmaR, 2.5f);
     }
 
+    public void RPGShootLeft()
+    {
+        //Start the backdraft
+        // Instantiate(RPGBackdraftLeft, transform.position, Quaternion.identity);
+        // Destroy(RPGBackdraftLeft, 1.5f);
+        //Fire the rocket
+        GameObject RPGRoundL;
+        RPGRoundL = Instantiate(RPGShotLeft, transform.position, Quaternion.identity);
 
-    
+
+
+    }
+
+    public void RPGShootRight()
+    {
+        //Start the backdraft
+        //Instantiate(RPGBackdraftRight, transform.position, Quaternion.identity);
+        //Destroy(RPGBackdraftRight, 1.5f);
+        //Fire the rocket
+        GameObject RPGRoundR;
+        RPGRoundR = Instantiate(RPGShotRight, transform.position, Quaternion.identity);
+
+
+    }
+
+
+    //These two functions handle the spear throwing by the enemies
+    public void enemySpearLeft()
+    {
+        GameObject SL;
+        SL = Instantiate(SpearLeft, transform.position, Quaternion.identity);
+        Destroy(SpearLeft, 3.5f);
+    }
+
+    public void enemySpearRight()
+    {
+        GameObject SR;
+        SR = Instantiate(SpearRight, transform.position, Quaternion.identity);
+        Destroy(SpearLeft, 3.5f);
+    }
 }

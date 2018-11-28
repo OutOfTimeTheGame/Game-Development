@@ -50,7 +50,10 @@ public class mummyMove : MonoBehaviour {
         if (mummyHealth <=0)
         {   
             //kill the mummy within a time frame
-            Destroy(mummy, 0.02f);
+            Destroy(mummy);
+            GameObject PS = GameObject.Find("Dean");
+            PlayerScript pScript = PS.GetComponent<PlayerScript>();
+            pScript.increaseScoreMummy();
         }
     }
 
@@ -65,6 +68,11 @@ public class mummyMove : MonoBehaviour {
     public void loseHealthShotgun()
     {
         mummyHealth -= 20;
+    }
+
+    public void loseHealthExplosion()
+    {
+        mummyHealth-=100;
     }
 
     public void OnTriggerEnter2D(Collider2D collision)
@@ -103,6 +111,10 @@ public class mummyMove : MonoBehaviour {
             
             loseHealthRifle();
             
+        }
+        if (collision.gameObject.tag == "Explosion")
+        {
+            loseHealthExplosion();
         }
 
     }

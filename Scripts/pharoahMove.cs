@@ -7,6 +7,7 @@ public class pharoahMove : MonoBehaviour {
     //Kieran Lewis 2018 :) 
     //Declaring use of the animator
     Animator anim;
+    
 
     public float pharoahMoveSpeed = 1f;
     public GameObject pharoah1;
@@ -14,17 +15,22 @@ public class pharoahMove : MonoBehaviour {
     //Shotgun does 20 damage to each enemy
     //Rifle does 10 damage to each enemy
     public int pharoahHealth = 15;
+    //The fire rate of which the enemy can fire their spears
+
 
     public bool pharoahMovingLeft;
     public bool pharoahMovingRight;
+  
 
     // Use this for initialization
     void Start ()
     {
         anim = GetComponent<Animator>();
+       
         //The pharoah, like the mummy, will start by facing left
         pharoahMovingLeft = true;
         pharoahMovingRight = false;
+    
 	}
 	
 	// Update is called once per frame
@@ -38,9 +44,12 @@ public class pharoahMove : MonoBehaviour {
 
         if (pharoahMovingRight == true)
         {
+            
+            
             anim.Play("pharoahRight");
             transform.Translate(new Vector2(+pharoahMoveSpeed, 0) * Time.deltaTime * pharoahMoveSpeed);
         }
+      
 
         if (pharoahHealth <= 5)
         {
@@ -51,10 +60,13 @@ public class pharoahMove : MonoBehaviour {
 
         if (pharoahHealth <= 0)
         {
-            Destroy(pharoah1, 0.02f);
+            Destroy(pharoah1);
+            GameObject PS = GameObject.Find("Dean");
+            PlayerScript pScript = PS.GetComponent<PlayerScript>();
+            pScript.increaseScorePharoah();
         }
     }
-
+    
     public void loseHealthPistol()
     {
         pharoahHealth -= 5;
@@ -68,11 +80,15 @@ public class pharoahMove : MonoBehaviour {
     {
         pharoahHealth -= 20;
     }
+    public void loseHealthExplosion()
+    {
+        pharoahHealth -= 100;
+    }
 
     public void OnTriggerEnter2D(Collider2D collision)
     {
-        //If the mummy walks against the left zone then they will turn around and walk to the right zone.
-        //If the mummy walks against the right zone then they will turn around and walk to the left zone.
+        //If the pharoah walks against the left zone then they will turn around and walk to the right zone.
+        //If the pharoah walks against the right zone then they will turn around and walk to the left zone.
 
         if (collision.gameObject.tag == "zoneLeft")
         {
@@ -88,24 +104,23 @@ public class pharoahMove : MonoBehaviour {
 
         if (collision.gameObject.tag == "pistolBullet")
         {
-
             loseHealthPistol();
-
         }
 
         if (collision.gameObject.tag == "shotgunShell")
         {
-
             loseHealthShotgun();
-
         }
 
         if (collision.gameObject.tag == "rifleBullet")
         {
-
             loseHealthRifle();
-
         }
+        if (collision.gameObject.tag == "Explosion")
+        {
+            loseHealthExplosion();
+        }
+       
 
     }
 }

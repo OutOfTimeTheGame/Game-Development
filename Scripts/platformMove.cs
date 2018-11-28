@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class platformMove : MonoBehaviour
 {
-
-    public float platformMoveSpeed = 1f;
+    //Kieran Lewis 2018 :)
+    public float platformMoveSpeed = 1.6f;
     public bool movingLeft;
     public bool movingRight;
 

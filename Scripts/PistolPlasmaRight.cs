@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class PistolPlasmaRight : MonoBehaviour
 {
+    //Kieran Lewis 2018 :)
     public float plasmaSpeed = 8.0f;
     public Rigidbody2D rb2;
 
@@ -16,6 +17,9 @@ public class PistolPlasmaRight : MonoBehaviour
     public GameObject ShotgunPlasmaLeft;
     public GameObject ShotgunPlasmaRight;
 
+    public GameObject enemyPlasmaLeft;
+    public GameObject enemyPlasmaRight;
+
     // Use this for initialization
     void Start ()
     {
@@ -24,11 +28,6 @@ public class PistolPlasmaRight : MonoBehaviour
         rb2.velocity = transform.right * plasmaSpeed;
     }
 	
-	// Update is called once per frame
-	void Update ()
-    {
-		
-	}
     public void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.gameObject.tag == "Mummy")
@@ -100,5 +99,11 @@ public class PistolPlasmaRight : MonoBehaviour
             Destroy(ShotgunPlasmaLeft);
             Destroy(ShotgunPlasmaRight);
         }
+
+        if (collision.gameObject.tag == "Dean")
+        {
+            Destroy(enemyPlasmaRight);
+        }
+
     }
 }
