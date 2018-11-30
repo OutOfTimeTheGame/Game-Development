@@ -17,3 +17,5 @@ week 9 - I implemented moving platforms into the game
 week 10 - I coded the player health bar and the on screen ammo counters for each weapon. I also finished coding the final enemies for the game 
 
 week 11 - I finished overall development of the prototype, sound just needs to be added still. 
+
+week 12 - Finished any bug fixing and uploaded full submission to moodle
